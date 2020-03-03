@@ -1,0 +1,35 @@
+ESC P
+     Device Control String (DCS  is 0x90).
+
+
+ESC [
+     Control Sequence Introducer (CSI  is 0x9b).
+
+
+ESC ]
+     Operating System Command (OSC  is 0x9d).
+
+	  
+CSI Ps n  Device Status Report (DSR).
+            Ps = 5  -> Status Report.
+          Result ("OK") is CSI 0 n
+            Ps = 6  -> Report Cursor Position (CPR) [row;column].
+          Result is CSI r ; c R
+
+
+CSI Pt ; Pl ; Pb ; Pr # |
+          Report selected graphic rendition (XTREPORTSGR), xterm.  The
+          response is an SGR sequence which contains the attributes
+          which are common to all cells in a rectangle.
+            Pt ; Pl ; Pb ; Pr denotes the rectangle.
+				
+
+/////////////////////////////////////////////////////////////////////////////				
+dumitru@dumitru-OptiPlex:~$ showkey -a
+
+Press any keys - Ctrl-D will terminate this program
+
+d 	100 0144 0x64
+f 	102 0146 0x66
+^? 	127 0177 0x7f
+^M 	 13 0015 0x0d

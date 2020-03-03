@@ -1,0 +1,105 @@
+ldd - print shared object dependencies
+
+SYNOPSIS
+       ldd [option]... file...
+
+DESCRIPTION
+       ldd  prints the shared objects (shared libraries) required by each program or
+       shared object specified on the command line.  An example of its use and  out‐
+       put is the following:
+
+         $ ldd /bin/ls
+                 linux-vdso.so.1 (0x00007ffcc3563000)
+                 libselinux.so.1 => /lib64/libselinux.so.1 (0x00007f87e5459000)
+                 libcap.so.2 => /lib64/libcap.so.2 (0x00007f87e5254000)
+                 libc.so.6 => /lib64/libc.so.6 (0x00007f87e4e92000)
+                 libpcre.so.1 => /lib64/libpcre.so.1 (0x00007f87e4c22000)
+                 libdl.so.2 => /lib64/libdl.so.2 (0x00007f87e4a1e000)
+                 /lib64/ld-linux-x86-64.so.2 (0x00005574bf12e000)
+                 libattr.so.1 => /lib64/libattr.so.1 (0x00007f87e4817000)
+                 libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f87e45fa000)
+/////////////////////////////////////////////////////////////////////////////////////////////////
+Usage: objdump <option(s)> <file(s)>
+ Display information from object <file(s)>.
+ At least one of the following switches must be given:
+  -a, --archive-headers    Display archive header information
+  -f, --file-headers       Display the contents of the overall file header
+  -p, --private-headers    Display object format specific file header contents
+  -P, --private=OPT,OPT... Display object format specific contents
+  -h, --[section-]headers  Display the contents of the section headers
+  -x, --all-headers        Display the contents of all headers
+  -d, --disassemble        Display assembler contents of executable sections
+  -D, --disassemble-all    Display assembler contents of all sections
+  -S, --source             Intermix source code with disassembly
+  -s, --full-contents      Display the full contents of all sections requested
+  -g, --debugging          Display debug information in object file
+  -e, --debugging-tags     Display debug information using ctags style
+  -G, --stabs              Display (in raw form) any STABS info in the file
+  -W[lLiaprmfFsoRtUuTgAckK] or
+  --dwarf[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,
+          =frames-interp,=str,=loc,=Ranges,=pubtypes,
+          =gdb_index,=trace_info,=trace_abbrev,=trace_aranges,
+          =addr,=cu_index,=links,=follow-links]
+                           Display DWARF info in the file
+  -t, --syms               Display the contents of the symbol table(s)
+  -T, --dynamic-syms       Display the contents of the dynamic symbol table
+  -r, --reloc              Display the relocation entries in the file
+  -R, --dynamic-reloc      Display the dynamic relocation entries in the file
+  @<file>                  Read options from <file>
+  -v, --version            Display this program's version number
+  -i, --info               List object formats and architectures supported
+  -H, --help               Display this information
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+-nostdlib
+           Do not use the standard system startup files or libraries when linking.
+           No startup files and only the libraries you specify are passed to the
+           linker, and options specifying linkage of the system libraries, such as
+           -static-libgcc or -shared-libgcc, are ignored.
+
+           The compiler may generate calls to "memcmp", "memset", "memcpy" and
+           "memmove".  These entries are usually resolved by entries in libc.  These
+           entry points should be supplied through some other mechanism when this
+           option is specified.
+
+           One of the standard libraries bypassed by -nostdlib and -nodefaultlibs is
+           libgcc.a, a library of internal subroutines which GCC uses to overcome
+           shortcomings of particular machines, or special needs for some languages.
+
+           In most cases, you need libgcc.a even when you want to avoid other
+           standard libraries.  In other words, when you specify -nostdlib or
+           -nodefaultlibs you should usually specify -lgcc as well.  This ensures
+           that you have no unresolved references to internal GCC library
+           subroutines.  (An example of such an internal subroutine is "__main",
+           used to ensure C++ constructors are called.)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+      -static-libgcc
+           On systems that provide libgcc as a shared library, these options force
+           the use of either the shared or static version, respectively.  If no
+           shared version of libgcc was built when the compiler was configured, these
+           options have no effect.
+
+           There are several situations in which an application should use the shared
+           libgcc instead of the static version.  The most common of these is when
+           the application wishes to throw and catch exceptions across different
+           shared libraries.  In that case, each of the libraries as well as the
+           application itself should use the shared libgcc.
+
+           Therefore, the G++ and driver automatically adds -shared-libgcc
+            whenever you build a shared library or a main executable, because C++
+            programs typically use exceptions, so this is the right thing to do.
+
+           If, instead, you use the GCC driver to create shared libraries, you may
+           find that they are not always linked with the shared libgcc.  If GCC
+           finds, at its configuration time, that you have a non-GNU linker or a GNU
+           linker that does not support option --eh-frame-hdr, it links the shared
+           version of libgcc into shared libraries by default.  Otherwise, it takes
+           advantage of the linker and optimizes away the linking with the shared
+           version of libgcc, linking with the static version of libgcc by default.
+           This allows exceptions to propagate through such shared libraries, without
+           incurring relocation costs at library load time.
+
+           However, if a library or main executable is supposed to throw or catch
+           exceptions, you must link it using the G++ driver, as appropriate for the
+           languages used in the program, or using the option -shared-libgcc, such
+           that it is linked with the shared libgcc.
+

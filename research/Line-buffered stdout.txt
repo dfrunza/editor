@@ -1,0 +1,7 @@
+The stream stderr is unbuffered. The stream stdout is line-buffered when it points to a terminal.
+Partial lines will not appear until fflush(3) or exit(3) is called, or a newline is printed.
+This can produce unexpected results, especially with debugging output.
+The buffering mode of the standard streams (or any other stream) can be changed using the setbuf(3) or setvbuf(3) call.
+Note that in case stdin is associated with a terminal, there may also be input buffering in the terminal driver, entirely unrelated
+to stdio buffering. (Indeed, normally terminal input is line buffered in the kernel.)
+This kernel input handling can be modified using calls like tcsetattr(3); see also stty(1), and termios(3).
